@@ -62,7 +62,7 @@ def bot():
         if incoming_msg in breakfast_ingredients:
             session["ingredient"] = breakfast_ingredients[incoming_msg]
             session["step"] = "show_results"
-            dynamic_link = f"https://7b1e-2401-4900-1c5c-b72a-d151-6e38-f017-acde.ngrok-free.app/recipes/{session['ingredient']}"
+            dynamic_link = f"https://kbchatbotv1.onrender.com/recipes/{session['ingredient']}"
             reply.body(f"Found recipes for {session['ingredient']}! Click here to view: {dynamic_link}")
         else:
             reply.body("Invalid choice. Please select an ingredient from the list.")
@@ -106,14 +106,32 @@ def get_recipes(ingredient, sort_by="Cooking_Time", order="asc"):
 
 # Route to Display Recipes Page with Sorting & Caching
 @app.route("/recipes/<ingredient>")
-@cache.cached(timeout=120, query_string=True)  # Cache for 2 minutes, respect sorting parameters
+@cache.cached(timeout=120, query_string=True)  # Cache for 2 minutes, respects ?sort=
 def show_recipes(ingredient):
-    # Get sorting parameters from user
-    sort_by = request.args.get("sort_by", "Cooking_Time")  # Default sorting by cooking time
-    order = request.args.get("order", "asc")
+    sort_by_param = request.args.get("sort")
 
-    recipes = get_recipes(ingredient, sort_by, order)
-    recipe_count = len(recipes)
+    if sort_by_param == "cooking_time":
+        sort_by = "Cooking_Time"
+        order = "ASC"
+    else:
+        sort_by = None
+        order = None
+
+    conn = sqlite3.connect("recipes2.db")
+    cursor = conn.cursor()
+
+    query = """
+        SELECT `Dish Name`, `Image`, `Meal Type`, `State`, `Prep_time`, `Cooking_Time`, `Spice Level`
+        FROM recipes2
+        WHERE LOWER(`Key Ingredient`) LIKE LOWER(?)
+    """
+
+    if sort_by:
+        query += f" ORDER BY {sort_by} {order}"
+
+    cursor.execute(query, ('%' + ingredient.strip() + '%',))
+    recipes = cursor.fetchall()
+    conn.close()
 
     processed_recipes = []
     for recipe in recipes:
@@ -139,7 +157,14 @@ def show_recipes(ingredient):
 
         processed_recipes.append((dish_name, image, meal_type, state, total_time, spice_display))
 
-    return render_template("recipe.html", ingredient=ingredient, recipes=processed_recipes, recipe_count=recipe_count, sort_by=sort_by, order=order)
+    return render_template(
+        "recipe.html",
+        ingredient=ingredient,
+        recipes=processed_recipes,
+        recipe_count=len(recipes),
+        sort_by=sort_by,
+        order=order
+    )
 
 # Route to Show Individual Recipe Details
 @app.route("/recipe/<recipe_name>")
