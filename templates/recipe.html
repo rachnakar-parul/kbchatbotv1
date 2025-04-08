@@ -120,13 +120,13 @@
     <div class="recipe-count">We found <b>{{ recipe_count }}</b> {{ ingredient }} {{ meal_type }} recipes for you</div>
 
     <!-- ✅ Sorting Links (Dynamic Sorting via URL Parameters) -->
-    <div class="sort-options">
-        <span>Sort by:</span>
-        <a href="?sort_by=Cooking_Time&order=asc">Cooking Time ↑</a>
-        <a href="?sort_by=Cooking_Time&order=desc">Cooking Time ↓</a>
-        <a href="?sort_by=Spice Level&order=asc">Spice Level ↑</a>
-        <a href="?sort_by=Spice Level&order=desc">Spice Level ↓</a>
-    </div>
+    <form class="sort-options" method="get">
+        <label>
+            <input type="checkbox" name="sort" value="cooking_time" onchange="this.form.submit()" {% if sort_by == 'Cooking_Time' and order == 'asc' %}checked{% endif %}>
+            Sort by: Cooking time (Low to High)
+        </label>
+    </form>
+    
 
     <div class="recipe-grid">
         {% for recipe in recipes %}

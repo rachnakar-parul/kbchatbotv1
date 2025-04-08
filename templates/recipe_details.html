@@ -265,51 +265,23 @@
 
         
         
-        <div class="section">
-            <div class="section">
-                <h2>Instructions</h2>
+<div class="section">
+    <h2>Instructions</h2>
+    {% for step in instructions %}
+        {% set stripped = step.strip() %}
+        
+        {% if ':' in stripped and stripped.split(':')[0]|length < 30 %}
+            <p class="custom-subheading">{{ stripped }}</p>
+        {% else %}
+            {% set cleaned = stripped.split('.', 1)[1].strip() if stripped.split(' ')[0].rstrip('.').isdigit() else stripped %}
+            <div class="custom-item small-text">
+                <div class="custom-bullet">{{ loop.index }}</div>
+                <div>{{ cleaned }}</div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
             
-                <div class="instruction-card-scroll">
-                    {% set section = [] %}
-                    {% for step in instructions %}
-                        {% if step[0].isalpha() and step.endswith(":") %}
-                            {% if section %}
-                                <div class="instruction-card">
-                                    <div class="custom-subheading">{{ current_heading }}</div>
-                                    <ul class="custom-list">
-                                        {% for point in section %}
-                                            {% set cleaned = point.split('.', 1)[1].strip() if point.strip().split(' ')[0].rstrip('.').isdigit() else point %}
-                                            <li class="custom-item small-text">
-                                                <div class="custom-bullet">{{ loop.index }}</div>
-                                                <div>{{ cleaned }}</div>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                                {% set section = [] %}
-                            {% endif %}
-                            {% set current_heading = step %}
-                        {% else %}
-                            {% set _ = section.append(step) %}
-                        {% endif %}
-                    {% endfor %}
-            
-                    {% if section %}
-                        <div class="instruction-card">
-                            <div class="custom-subheading">{{ current_heading }}</div>
-                            <ul class="custom-list">
-                                {% for point in section %}
-                                    {% set cleaned = point.split('.', 1)[1].strip() if point.strip().split(' ')[0].rstrip('.').isdigit() else point %}
-                                    <li class="custom-item small-text">
-                                        <div class="custom-bullet">{{ loop.index }}</div>
-                                        <div>{{ cleaned }}</div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>                    
 
         <!-- Video -->
         <div class="video-section">
