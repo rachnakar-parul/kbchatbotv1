@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ dish_name }}</title>
+
+    <!-- Font: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 30px 0 10px;
+            color: #222;
+        }
+
+        p, li {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .recipe-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            text-align: center;
+        }
+
+        .info-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #888;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-top: 4px;
+        }
+
+        .video-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .video-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .video-container img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-button::before {
+            content: "▶";
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
+         .custom-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+         .custom-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+         .custom-bullet {
+            min-width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: #d4edda;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+         .small-text {
+            font-size: 14px;
+        }
+
+         .custom-subheading {
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: #222;
+        }
+
+         .instruction-scroll {
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+         .horizontal-list {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 20px;
+            min-width: 100%;
+        }
+
+         .horizontal-list .custom-item {
+            flex: 0 0 auto;
+            width: 280px; /* You can tweak this width as needed */
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+        }
+
+        /* New CSS for instruction cards */
+         .instruction-card-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 10px;
+        }
+
+         .instruction-card {
+            flex: 0 0 90%;
+            max-width: 90%;
+            min-width: 280px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            scroll-snap-align: start;
+    }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Image -->
+        <img src="{{ image_link }}" alt="{{ dish_name }}">
+
+        <!-- Dish Name -->
+        <h1>{{ dish_name }}</h1>
+
+        <!-- Info Grid -->
+        <div class="recipe-info-grid">
+            <div class="info-box">
+                <div class="info-title">Cooking Time</div>
+                <div class="info-value">{{ cooking_time }} mins</div>
+            </div>
+            <div class="info-box">
+                <div class="info-title">Prep Time</div>
+                <div class="info-value">{{ prep_time }} mins</div>
+            </div>
+            <div class="info-box">
+                <div class="info-title">State</div>
+                <div class="info-value">{{ state }}</div>
+            </div>
+            <div class="info-box">
+                <div class="info-title">Spice Level</div>
+                <div class="info-value">
+                    {% if spice_level == 'Low' %}
+                        🌶️
+                    {% elif spice_level == 'Medium' %}
+                        🌶️🌶️
+                    {% else %}
+                        🌶️🌶️🌶️
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Ingredients -->
+<div class="section">
+    <h2>Ingredients</h2>
+    {% for item in ingredient_list %}
+        {% set stripped = item.strip() %}
+        
+        {% if ':' in stripped and stripped.split(':')[0]|length < 30 %}
+            <p class="custom-subheading">{{ stripped }}</p>
+        {% else %}
+            <div class="custom-item small-text">
+                <div class="custom-bullet">{{ loop.index }}</div>
+                <div>{{ stripped }}</div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+        
+        
+        <div class="section">
+            <div class="section">
+                <h2>Instructions</h2>
+            
+                <div class="instruction-card-scroll">
+                    {% set section = [] %}
+                    {% for step in instructions %}
+                        {% if step[0].isalpha() and step.endswith(":") %}
+                            {% if section %}
+                                <div class="instruction-card">
+                                    <div class="custom-subheading">{{ current_heading }}</div>
+                                    <ul class="custom-list">
+                                        {% for point in section %}
+                                            {% set cleaned = point.split('.', 1)[1].strip() if point.strip().split(' ')[0].rstrip('.').isdigit() else point %}
+                                            <li class="custom-item small-text">
+                                                <div class="custom-bullet">{{ loop.index }}</div>
+                                                <div>{{ cleaned }}</div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% set section = [] %}
+                            {% endif %}
+                            {% set current_heading = step %}
+                        {% else %}
+                            {% set _ = section.append(step) %}
+                        {% endif %}
+                    {% endfor %}
+            
+                    {% if section %}
+                        <div class="instruction-card">
+                            <div class="custom-subheading">{{ current_heading }}</div>
+                            <ul class="custom-list">
+                                {% for point in section %}
+                                    {% set cleaned = point.split('.', 1)[1].strip() if point.strip().split(' ')[0].rstrip('.').isdigit() else point %}
+                                    <li class="custom-item small-text">
+                                        <div class="custom-bullet">{{ loop.index }}</div>
+                                        <div>{{ cleaned }}</div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>                    
+
+        <!-- Video -->
+        <div class="video-section">
+            <h2>Watch Video</h2>
+            <a href="{{ video_link }}" target="_blank" class="video-container">
+                <img src="{{ image_link }}" alt="Watch Video">
+                <div class="play-button"></div>
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

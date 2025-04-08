@@ -1,0 +1,4 @@
+Flask
+gunicorn
+twilio
+flask-caching

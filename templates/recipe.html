@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suggested Recipes</title>
+
+    <!-- ✅ Add Google Font (Poppins) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #3e4a2e;
+        }
+        .recipe-count {
+            text-align: left;
+            font-size: 16px;
+            font-weight: 400;
+            color: #3e4a2e;
+            margin-bottom: 10px;
+            margin-left: 20px;
+        }
+        .sort-options {
+            text-align: left;
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        .sort-options a {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #3e4a2e;
+            margin-right: 10px;
+            border: 1px solid #3e4a2e;
+            padding: 5px 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .sort-options a:hover {
+            background-color: #3e4a2e;
+            color: #ffffff;
+        }
+        .recipe-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .recipe-card {
+            background: #fbff81;
+            border-radius: 12px;
+            border: 1px solid #f1ff6f;
+            width: 270px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+        }
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+        }
+        .recipe-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            background-color: #e0e0e0;
+        }
+        .recipe-details {
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .recipe-info {
+            text-align: left;
+        }
+        .recipe-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .recipe-subtext {
+            font-size: 14px;
+            color: #666;
+        }
+        .recipe-time {
+            text-align: right;
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+        .spice-level {
+            font-size: 18px;
+            color: red;
+            margin-top: 4px;
+        }
+        .recipe-link {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Suggested Recipes</h1>
+
+    <div class="recipe-count">We found <b>{{ recipe_count }}</b> {{ ingredient }} {{ meal_type }} recipes for you</div>
+
+    <!-- ✅ Sorting Links (Dynamic Sorting via URL Parameters) -->
+    <div class="sort-options">
+        <span>Sort by:</span>
+        <a href="?sort_by=Cooking_Time&order=asc">Cooking Time ↑</a>
+        <a href="?sort_by=Cooking_Time&order=desc">Cooking Time ↓</a>
+        <a href="?sort_by=Spice Level&order=asc">Spice Level ↑</a>
+        <a href="?sort_by=Spice Level&order=desc">Spice Level ↓</a>
+    </div>
+
+    <div class="recipe-grid">
+        {% for recipe in recipes %}
+        <a href="/recipe/{{ recipe[0] }}" class="recipe-link">
+            <div class="recipe-card">
+                <img src="{{ recipe[1] if recipe[1] else 'https://via.placeholder.com/270x150?text=No+Image' }}" alt="{{ recipe[0] }}">
+                <div class="recipe-details">
+                    <div class="recipe-info">
+                        <div class="recipe-name">{{ recipe[0] }}</div>
+                        <div class="recipe-subtext">{{ recipe[2] }} recipe from {{ recipe[3] }}</div>
+                    </div>
+                    <div class="recipe-time">
+                        {{ recipe[4] }} mins
+                        <div class="spice-level">{{ recipe[5] }}</div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

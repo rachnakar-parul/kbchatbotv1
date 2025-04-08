@@ -1,0 +1,32 @@
+import yt_dlp
+import spacy
+
+nlp = spacy.load("en_core_web_sm")
+
+def download_youtube_video(url, output_path="video.mp4"):
+    ydl_opts = {
+        'format': 'bestvideo+bestaudio/best',
+        'outtmpl': output_path,
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
+    return output_path
+
+def extract_ingredients_steps(text):
+    doc = nlp(text)
+    ingredients = []
+    steps = []
+
+    for sent in doc.sents:
+        if any(word in sent.text.lower() for word in ["add", "mix", "chop", "cut", "grind", "fry", "boil", "saute"]):
+            steps.append(sent.text)
+        elif any(word in sent.text.lower() for word in ["cup", "tsp", "tbsp", "grams", "kg", "ml", "salt", "sugar", "flour"]):
+            ingredients.append(sent.text)
+
+    return ingredients, steps
+
+# Example Usage
+if __name__ == "__main__":
+    video_url = "https://www.youtube.com/watch?v=VIDEO_ID"
+    video_path = download_youtube_video(video_url)
+    print("Video downloaded:", video_path)

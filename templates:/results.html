@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipe Search Results</title>
+</head>
+<body>
+    <h2>Recipes Found:</h2>
+    <ul>
+        {% for recipe_id, recipe_name in recipes %}
+            <li><a href="/recipe/{{ recipe_id }}">{{ recipe_name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
